@@ -44,7 +44,7 @@ const FinalPrompt: React.FC = () => {
         </div>
         <div className="row-span-1 self-center">
           <button
-            className=" bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-[20vh]"
+            className=" bg-[#FD6585] text-white font-semibold py-2 px-4 rounded my-[20vh]"
             onClick={() => {
               copyPrompt();
               setCopied(true);
