@@ -49,8 +49,6 @@ export const ParameterSelectionProvider = ({ children }: ProviderArgs) => {
     useState<ParameterSelectionType>({});
 
   const updateParameterSelection = (ps: ParameterSelectionType) => {
-    console.log("updateParameterSelection", parameterSelection, ps);
-
     setParameterSelection({ ...parameterSelection, ...ps });
   };
 
