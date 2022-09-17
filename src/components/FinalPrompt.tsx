@@ -1,11 +1,14 @@
+import { User } from "@supabase/supabase-js";
 import React, { useEffect, useState } from "react";
 import { useParameterSelection, usePromptBase } from "../context/PromptContext";
 import { PARAMETERS } from "../parameters";
+import { supabase } from "../supabaseClient";
 import AuthModal from "./AuthModal";
 
 const FinalPrompt: React.FC = () => {
   const [copied, setCopied] = useState<boolean>(false);
   const [showAuthModal, setShowAuthModal] = useState<boolean>(false);
+  const [supabaseUser, setSupabaseUser] = useState<User | null>(null);
   const prompt = usePromptBase();
   const promptParameters = useParameterSelection();
 
@@ -37,6 +40,14 @@ const FinalPrompt: React.FC = () => {
     setCopied(false);
   }, [finalText]);
 
+  useEffect(() => {
+    setSupabaseUser(supabase.auth.user());
+  }, []);
+
+  supabase.auth.onAuthStateChange((event, session) => {
+    setSupabaseUser(session?.user || null);
+  });
+
   return (
     <div
       className="h-screen w-full grid justify-items-center content-center"
@@ -45,14 +56,25 @@ const FinalPrompt: React.FC = () => {
       }}
     >
       <div className="w-5/6 flex flex-row-reverse -mt-8 mb-8">
-        <button
-          className=" bg-[#FD6585] text-white font-semibold py-2 px-4 rounded"
-          onClick={() => {
-            setShowAuthModal(true);
-          }}
-        >
-          Sign In
-        </button>
+        {supabaseUser ? (
+          <button
+            className=" bg-[#FD6585] text-white font-semibold py-2 px-4 rounded"
+            onClick={() => {
+              supabase.auth.signOut();
+            }}
+          >
+            Sign Out
+          </button>
+        ) : (
+          <button
+            className=" bg-[#FD6585] text-white font-semibold py-2 px-4 rounded"
+            onClick={() => {
+              setShowAuthModal(true);
+            }}
+          >
+            Sign In
+          </button>
+        )}
       </div>
       <div className="w-4/5 h-[80vh] bg-white grid grid-rows-4 justify-items-center content-center rounded-lg shadow-lg">
         <div className="row-span-3 self-center w-3/4">
