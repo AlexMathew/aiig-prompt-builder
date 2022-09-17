@@ -1,7 +1,10 @@
 import React from "react";
+import { usePromptBase } from "../context/PromptContext";
 
 const FinalPrompt: React.FC = () => {
-  return <div className="text-3xl font-bold underline">Prompt Builder</div>;
+  const prompt = usePromptBase();
+
+  return <div className="text-3xl font-bold underline">{prompt}</div>;
 };
 
 export default FinalPrompt;
