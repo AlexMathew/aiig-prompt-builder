@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParameterSelection, usePromptBase } from "../context/PromptContext";
 import { PARAMETERS } from "../parameters";
 
 const FinalPrompt: React.FC = () => {
+  const [copied, setCopied] = useState<boolean>(false);
   const prompt = usePromptBase();
   const promptParameters = useParameterSelection();
 
@@ -26,6 +27,10 @@ const FinalPrompt: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    setCopied(false);
+  }, [finalText]);
+
   return (
     <div
       className="h-screen w-full grid justify-items-center content-center"
@@ -40,9 +45,12 @@ const FinalPrompt: React.FC = () => {
         <div className="row-span-1 self-center">
           <button
             className=" bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-[20vh]"
-            onClick={copyPrompt}
+            onClick={() => {
+              copyPrompt();
+              setCopied(true);
+            }}
           >
-            Copy To Clipboard
+            {copied ? "Copied!" : "Copy To Clipboard"}
           </button>
         </div>
       </div>
