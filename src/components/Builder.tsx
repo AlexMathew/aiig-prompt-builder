@@ -1,8 +1,15 @@
 import React from "react";
-import { usePromptBaseUpdate } from "../context/PromptContext";
+import {
+  useParameterSelection,
+  useParameterSelectionUpdate,
+  usePromptBaseUpdate,
+} from "../context/PromptContext";
+import { PARAMETERS } from "../parameters";
 
 const Builder: React.FC = () => {
   const setPromptBase = usePromptBaseUpdate();
+  const promptParameters = useParameterSelection();
+  const setPromptParameter = useParameterSelectionUpdate();
 
   return (
     <div className="w-2/3">
@@ -12,6 +19,35 @@ const Builder: React.FC = () => {
         type="text"
         onChange={(e) => setPromptBase(e.target.value)}
       />
+      <div className="grid gap-4">
+        {Object.keys(PARAMETERS).map((parameter: string, index: number) => (
+          <div key={index}>
+            {parameter}
+            <div className="grid grid-cols-3 gap-x-4">
+              {Object.keys(PARAMETERS[parameter]).map(
+                (option: string, optionIndex: number) => {
+                  const isSelected = promptParameters[parameter] === option;
+                  return (
+                    <div
+                      key={`${index}_${optionIndex}`}
+                      className={`cursor-pointer ${
+                        isSelected ? "font-bold" : "font-normal"
+                      } ${isSelected ? "text-black" : "text-gray-400"}`}
+                      onClick={(e) => {
+                        setPromptParameter({
+                          [parameter]: isSelected ? "" : option,
+                        });
+                      }}
+                    >
+                      {PARAMETERS[parameter][option]}
+                    </div>
+                  );
+                }
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

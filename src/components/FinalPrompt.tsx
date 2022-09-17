@@ -1,10 +1,22 @@
 import React from "react";
-import { usePromptBase } from "../context/PromptContext";
+import { useParameterSelection, usePromptBase } from "../context/PromptContext";
+import { PARAMETERS } from "../parameters";
 
 const FinalPrompt: React.FC = () => {
   const prompt = usePromptBase();
+  const promptParameters = useParameterSelection();
 
-  return <div className="text-3xl font-bold underline">{prompt}</div>;
+  const parametersText = Object.keys(promptParameters)
+    .map((parameter) => PARAMETERS[parameter][promptParameters[parameter]])
+    .filter((option) => !!option)
+    .join(",");
+
+  return (
+    <div className="text-3xl font-bold underline">
+      {prompt}
+      {parametersText ? `, ${parametersText}` : ""}
+    </div>
+  );
 };
 
 export default FinalPrompt;
