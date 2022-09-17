@@ -9,10 +9,10 @@ const FinalPrompt: React.FC = () => {
   const parametersText = Object.keys(promptParameters)
     .map((parameter) => PARAMETERS[parameter][promptParameters[parameter]])
     .filter((option) => !!option)
-    .join(",");
+    .join(", ");
 
   return (
-    <div className="text-3xl font-bold underline w-2/3">
+    <div className="text-3xl font-bold w-2/3">
       {prompt}
       {parametersText ? `${prompt ? "," : ""} ${parametersText}` : ""}
     </div>
