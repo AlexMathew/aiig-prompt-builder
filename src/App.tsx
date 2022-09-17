@@ -1,7 +1,7 @@
 import React from "react";
 
 const App: React.FC = () => {
-  return <div>Prompt Builder</div>;
+  return <div className="text-3xl font-bold underline">Prompt Builder</div>;
 };
 
 export default App;
