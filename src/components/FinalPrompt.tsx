@@ -12,9 +12,9 @@ const FinalPrompt: React.FC = () => {
     .join(",");
 
   return (
-    <div className="text-3xl font-bold underline">
+    <div className="text-3xl font-bold underline w-2/3">
       {prompt}
-      {parametersText ? `, ${parametersText}` : ""}
+      {parametersText ? `${prompt ? "," : ""} ${parametersText}` : ""}
     </div>
   );
 };
