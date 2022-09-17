@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useParameterSelection, usePromptBase } from "../context/PromptContext";
 import { PARAMETERS } from "../parameters";
+import AuthModal from "./AuthModal";
 
 const FinalPrompt: React.FC = () => {
   const [copied, setCopied] = useState<boolean>(false);
+  const [showAuthModal, setShowAuthModal] = useState<boolean>(false);
   const prompt = usePromptBase();
   const promptParameters = useParameterSelection();
 
@@ -27,6 +29,10 @@ const FinalPrompt: React.FC = () => {
     }
   };
 
+  const closeModal = () => {
+    setShowAuthModal(false);
+  };
+
   useEffect(() => {
     setCopied(false);
   }, [finalText]);
@@ -35,9 +41,19 @@ const FinalPrompt: React.FC = () => {
     <div
       className="h-screen w-full grid justify-items-center content-center"
       style={{
-        background: "linear-gradient(135deg, #FFD3A5 0%, #FD6585 100%)",
+        background: "linear-gradient(45deg, #FD6585 0%, #FFD3A5 100%)",
       }}
     >
+      <div className="w-5/6 flex flex-row-reverse -mt-8 mb-8">
+        <button
+          className=" bg-[#FD6585] text-white font-semibold py-2 px-4 rounded"
+          onClick={() => {
+            setShowAuthModal(true);
+          }}
+        >
+          Sign In
+        </button>
+      </div>
       <div className="w-4/5 h-[80vh] bg-white grid grid-rows-4 justify-items-center content-center rounded-lg shadow-lg">
         <div className="row-span-3 self-center w-3/4">
           <div className="text-3xl font-normal leading-[60px]">{finalText}</div>
@@ -54,6 +70,7 @@ const FinalPrompt: React.FC = () => {
           </button>
         </div>
       </div>
+      {showAuthModal ? <AuthModal closeModal={closeModal} /> : null}
     </div>
   );
 };
