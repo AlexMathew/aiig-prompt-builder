@@ -63,7 +63,7 @@ const Builder: React.FC = () => {
           ))}
         </div>
         <div
-          className="row-span-1 cursor-pointer underline font-bold"
+          className="row-span-1 cursor-pointer underline font-bold h-2/3"
           onClick={() => setShowSaleModal(true)}
         >
           Load more prompts
