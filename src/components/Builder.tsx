@@ -1,19 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   useParameterSelection,
   useParameterSelectionUpdate,
   usePromptBaseUpdate,
 } from "../context/PromptContext";
 import { PARAMETERS } from "../parameters";
+import SaleModal from "./SaleModal";
 
 const Builder: React.FC = () => {
+  const [showSaleModal, setShowSaleModal] = useState<boolean>(false);
   const setPromptBase = usePromptBaseUpdate();
   const promptParameters = useParameterSelection();
   const setPromptParameter = useParameterSelectionUpdate();
 
+  const closeModal = () => {
+    setShowSaleModal(false);
+  };
+
   return (
-    <div className="w-2/3 max-h-screen h-screen grid items-center">
-      <div className="grid gap-4 max-h-full h-2/3 overflow-scroll">
+    <div className="w-2/3 max-h-screen h-screen grid items-center grid-rows-5 ">
+      <div className="row-span-1">
         <input
           className="bg-gray-100 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
           id="inline-prompt"
@@ -21,6 +27,8 @@ const Builder: React.FC = () => {
           placeholder="Enter your description"
           onChange={(e) => setPromptBase(e.target.value)}
         />
+      </div>
+      <div className="grid gap-4 h-full row-span-3 overflow-scroll">
         {Object.keys(PARAMETERS).map((parameter: string, index: number) => (
           <div key={index}>
             {parameter}
@@ -49,6 +57,13 @@ const Builder: React.FC = () => {
           </div>
         ))}
       </div>
+      <div
+        className="row-span-1 cursor-pointer underline font-bold"
+        onClick={() => setShowSaleModal(true)}
+      >
+        Load more prompts
+      </div>
+      {showSaleModal ? <SaleModal closeModal={closeModal} /> : null}
     </div>
   );
 };
