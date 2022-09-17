@@ -19,7 +19,10 @@ const Builder: React.FC = () => {
 
   return (
     <div className="w-2/3 max-h-screen h-screen grid items-center justify-center">
-      <div className="font-bold text-3xl mt-4">Prompt Hero</div>
+      <div className="font-bold text-3xl mt-4 flex gap-4 items-center">
+        <img src="./logo.png" alt="" />
+        Prompt Hero
+      </div>
       <div className="w-full max-h-screen h-screen grid items-center grid-rows-5">
         <div className="row-span-1">
           <input
