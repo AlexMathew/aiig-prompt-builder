@@ -7,7 +7,7 @@ interface SaleModalProps {
 const SaleModal: React.FC<SaleModalProps> = ({ closeModal }) => {
   return (
     <div className="w-screen h-screen absolute top-0 left-0 flex content-center items-center justify-center bg-[#00000080]">
-      <div className="h-1/3 w-1/2 bg-white flex items-center justify-center px-8">
+      <div className="h-full w-full sm:h-1/3 sm:w-1/2 bg-white flex items-center justify-center px-8">
         <div className="grid grid-rows-5 gap-4">
           <div
             className="row-span-1 flex flex-row-reverse text-extrabold text-xl cursor-pointer"
@@ -38,9 +38,9 @@ const SaleModal: React.FC<SaleModalProps> = ({ closeModal }) => {
               <span className="text-[#FFA693]">✓</span> Stable Diffusion
             </div>
           </div>
-          <div className="grid grid-cols-4 gap-4">
+          <div className="grid gap-4">
             <div
-              className="row-span-1 font-semibold underline cursor-pointer"
+              className="font-semibold underline cursor-pointer"
               onClick={() => {
                 window.open(
                   "https://shreyasprakash.gumroad.com/l/prompt-hero-pro",
