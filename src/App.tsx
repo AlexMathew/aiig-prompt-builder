@@ -15,7 +15,7 @@ const App: React.FC = () => {
       <CurrentUserProvider>
         <PromptBaseProvider>
           <ParameterSelectionProvider>
-            <div className="h-screen grid grid-rows-2 sm:grid-cols-2 justify-items-center">
+            <div className="h-screen grid sm:grid-cols-2 justify-items-center">
               <Builder />
               <FinalPrompt />
             </div>

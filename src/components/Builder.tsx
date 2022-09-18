@@ -20,7 +20,7 @@ const Builder: React.FC = () => {
 
   return (
     <div className="w-2/3 max-h-screen h-screen grid items-center justify-center">
-      <div className="font-bold text-md sm:text-xl mt-4 flex gap-4 items-center justify-center sm:justify-start">
+      <div className="font-bold text-md sm:text-xl -mb-10 mt-12 flex gap-4 items-center justify-center sm:justify-start">
         <img src="./logo.png" alt="" />
         Prompt Hero
       </div>
@@ -65,14 +65,17 @@ const Builder: React.FC = () => {
             )
           )}
         </div>
-        {!currentUser.paying ? (
-          <div
-            className="row-span-1 cursor-pointer underline font-bold h-2/3"
-            onClick={() => setShowSaleModal(true)}
-          >
-            Load more prompts
-          </div>
-        ) : null}
+        <div className="row-span-1 grid gap-4 mb-12">
+          {!currentUser.paying ? (
+            <div
+              className="cursor-pointer underline font-bold h-2/3"
+              onClick={() => setShowSaleModal(true)}
+            >
+              Load more prompts
+            </div>
+          ) : null}
+          <div className="grid sm:hidden justify-center text-xl">▼</div>
+        </div>
         {showSaleModal ? <SaleModal closeModal={closeModal} /> : null}
       </div>
     </div>
