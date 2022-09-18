@@ -1,10 +1,10 @@
 import React, { useState } from "react";
+import { useCurrentUser } from "../context/CurrentUserContext";
 import {
   useParameterSelection,
   useParameterSelectionUpdate,
   usePromptBaseUpdate,
 } from "../context/PromptContext";
-import { PARAMETERS } from "../parameters";
 import SaleModal from "./SaleModal";
 
 const Builder: React.FC = () => {
@@ -12,6 +12,7 @@ const Builder: React.FC = () => {
   const setPromptBase = usePromptBaseUpdate();
   const promptParameters = useParameterSelection();
   const setPromptParameter = useParameterSelectionUpdate();
+  const currentUser = useCurrentUser();
 
   const closeModal = () => {
     setShowSaleModal(false);
@@ -34,40 +35,44 @@ const Builder: React.FC = () => {
           />
         </div>
         <div className="grid gap-4 h-full row-span-3 overflow-scroll">
-          {Object.keys(PARAMETERS).map((parameter: string, index: number) => (
-            <div key={index}>
-              {parameter}
-              <div className="grid grid-cols-3 gap-x-4">
-                {Object.keys(PARAMETERS[parameter]).map(
-                  (option: string, optionIndex: number) => {
-                    const isSelected = promptParameters[parameter] === option;
-                    return (
-                      <div
-                        key={`${index}_${optionIndex}`}
-                        className={`cursor-pointer ${
-                          isSelected ? "font-bold" : "font-normal"
-                        } ${isSelected ? "text-black" : "text-gray-400"}`}
-                        onClick={(e) => {
-                          setPromptParameter({
-                            [parameter]: isSelected ? "" : option,
-                          });
-                        }}
-                      >
-                        {PARAMETERS[parameter][option]}
-                      </div>
-                    );
-                  }
-                )}
+          {Object.keys(currentUser.parameters || {}).map(
+            (parameter: string, index: number) => (
+              <div key={index}>
+                {parameter}
+                <div className="grid grid-cols-3 gap-x-4">
+                  {Object.keys((currentUser.parameters || {})[parameter]).map(
+                    (option: string, optionIndex: number) => {
+                      const isSelected = promptParameters[parameter] === option;
+                      return (
+                        <div
+                          key={`${index}_${optionIndex}`}
+                          className={`cursor-pointer ${
+                            isSelected ? "font-bold" : "font-normal"
+                          } ${isSelected ? "text-black" : "text-gray-400"}`}
+                          onClick={(e) => {
+                            setPromptParameter({
+                              [parameter]: isSelected ? "" : option,
+                            });
+                          }}
+                        >
+                          {(currentUser.parameters || {})[parameter][option]}
+                        </div>
+                      );
+                    }
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          )}
         </div>
-        <div
-          className="row-span-1 cursor-pointer underline font-bold h-2/3"
-          onClick={() => setShowSaleModal(true)}
-        >
-          Load more prompts
-        </div>
+        {!currentUser.paying ? (
+          <div
+            className="row-span-1 cursor-pointer underline font-bold h-2/3"
+            onClick={() => setShowSaleModal(true)}
+          >
+            Load more prompts
+          </div>
+        ) : null}
         {showSaleModal ? <SaleModal closeModal={closeModal} /> : null}
       </div>
     </div>

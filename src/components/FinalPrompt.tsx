@@ -1,7 +1,11 @@
 import { User } from "@supabase/supabase-js";
 import React, { useEffect, useState } from "react";
+import prompthero from "../api/prompthero";
+import {
+  useCurrentUser,
+  useCurrentUserUpdate,
+} from "../context/CurrentUserContext";
 import { useParameterSelection, usePromptBase } from "../context/PromptContext";
-import { PARAMETERS } from "../parameters";
 import { supabase } from "../supabaseClient";
 import AuthModal from "./AuthModal";
 
@@ -11,9 +15,14 @@ const FinalPrompt: React.FC = () => {
   const [supabaseUser, setSupabaseUser] = useState<User | null>(null);
   const prompt = usePromptBase();
   const promptParameters = useParameterSelection();
+  const currentUser = useCurrentUser();
+  const setCurrentUser = useCurrentUserUpdate();
 
   const parametersText = Object.keys(promptParameters)
-    .map((parameter) => PARAMETERS[parameter][promptParameters[parameter]])
+    .map(
+      (parameter) =>
+        currentUser.parameters?.[parameter][promptParameters[parameter]]
+    )
     .filter((option) => !!option)
     .join(", ");
 
@@ -41,11 +50,25 @@ const FinalPrompt: React.FC = () => {
   }, [finalText]);
 
   useEffect(() => {
-    setSupabaseUser(supabase.auth.user());
+    const fetcher = async () => {
+      const user: User | null = supabase.auth.user();
+      setSupabaseUser(user);
+      const resp = await prompthero.get("/prompthero-get", {
+        params: { email: user?.email },
+      });
+      setCurrentUser(resp.data);
+    };
+
+    fetcher();
   }, []);
 
-  supabase.auth.onAuthStateChange((event, session) => {
-    setSupabaseUser(session?.user || null);
+  supabase.auth.onAuthStateChange(async (event, session) => {
+    const user: User | null = session?.user || null;
+    setSupabaseUser(user);
+    const resp = await prompthero.get("/prompthero-get", {
+      params: { email: user?.email },
+    });
+    setCurrentUser(resp.data);
   });
 
   return (
