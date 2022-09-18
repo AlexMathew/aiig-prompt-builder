@@ -20,7 +20,7 @@ const Builder: React.FC = () => {
 
   return (
     <div className="w-2/3 max-h-screen h-screen grid items-center justify-center">
-      <div className="font-bold text-3xl mt-4 flex gap-4 items-center">
+      <div className="font-bold text-xl sm:text-3xl mt-4 flex gap-4 items-center justify-center sm:justify-start">
         <img src="./logo.png" alt="" />
         Prompt Hero
       </div>
