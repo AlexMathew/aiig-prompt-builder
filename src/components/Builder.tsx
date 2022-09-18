@@ -20,7 +20,7 @@ const Builder: React.FC = () => {
 
   return (
     <div className="w-2/3 max-h-screen h-screen grid items-center justify-center">
-      <div className="font-bold text-xl sm:text-3xl mt-4 flex gap-4 items-center justify-center sm:justify-start">
+      <div className="font-bold text-md sm:text-xl mt-4 flex gap-4 items-center justify-center sm:justify-start">
         <img src="./logo.png" alt="" />
         Prompt Hero
       </div>
@@ -39,7 +39,7 @@ const Builder: React.FC = () => {
             (parameter: string, index: number) => (
               <div key={index}>
                 {parameter}
-                <div className="grid grid-cols-3 gap-x-4">
+                <div className="grid grid-cols-3 gap-x-4 gap-y-1">
                   {Object.keys((currentUser.parameters || {})[parameter]).map(
                     (option: string, optionIndex: number) => {
                       const isSelected = promptParameters[parameter] === option;
