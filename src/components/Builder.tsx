@@ -1,14 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useCurrentUser } from "../context/CurrentUserContext";
 import {
   useParameterSelection,
   useParameterSelectionUpdate,
   usePromptBaseUpdate,
 } from "../context/PromptContext";
+import {
+  getRandomBasePrompt,
+  getRandomSelectionFromArray,
+} from "../utils/randomize";
 import SaleModal from "./SaleModal";
 
 const Builder: React.FC = () => {
   const [showSaleModal, setShowSaleModal] = useState<boolean>(false);
+  const [promptInput, setPromptInput] = useState<string>("");
   const setPromptBase = usePromptBaseUpdate();
   const promptParameters = useParameterSelection();
   const setPromptParameter = useParameterSelectionUpdate();
@@ -17,6 +22,26 @@ const Builder: React.FC = () => {
   const closeModal = () => {
     setShowSaleModal(false);
   };
+
+  const setRandomPrompt = () => {
+    const randomPrompt = getRandomBasePrompt();
+    setPromptInput(randomPrompt);
+    const parameters = currentUser?.parameters ?? {};
+    const randomParameterSelection: { [parameter: string]: string } = {};
+    Object.keys(parameters)
+      .slice(0, 4)
+      .forEach((parameter) => {
+        const randomOption = getRandomSelectionFromArray(
+          Object.keys(parameters[parameter])
+        );
+        randomParameterSelection[parameter] = randomOption;
+      });
+    setPromptParameter(randomParameterSelection);
+  };
+
+  useEffect(() => {
+    setPromptBase(promptInput);
+  }, [promptInput]);
 
   return (
     <div className="w-2/3 max-h-screen h-screen grid items-center justify-center">
@@ -31,12 +56,14 @@ const Builder: React.FC = () => {
             id="inline-prompt"
             type="text"
             placeholder="Enter your description"
-            onChange={(e) => setPromptBase(e.target.value)}
+            value={promptInput}
+            onChange={(e) => setPromptInput(e.target.value)}
           />
           <span className="absolute inset-y-0 right-0 flex items-center px-4 py-4 m-2 border-black border-[0.5px]">
             <button
               type="submit"
               className="flex gap-2 items-center focus:outline-none focus:shadow-outline font-normal text-sm leading-4"
+              onClick={setRandomPrompt}
             >
               <svg
                 width="32"
