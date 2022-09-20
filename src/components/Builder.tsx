@@ -25,14 +25,34 @@ const Builder: React.FC = () => {
         Prompt Hero
       </div>
       <div className="w-full max-h-screen h-screen grid items-center grid-rows-5">
-        <div className="row-span-1">
+        <div className="row-span-1 relative text-black">
           <input
-            className="bg-gray-100 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+            className="bg-white appearance-none border border-black rounded w-full h-12 py-2 px-4 text-black leading-tight focus:outline-none focus:bg-white focus:border-[#FD6585]"
             id="inline-prompt"
             type="text"
             placeholder="Enter your description"
             onChange={(e) => setPromptBase(e.target.value)}
           />
+          <span className="absolute inset-y-0 right-0 flex items-center px-4 py-4 m-2 border-black border-[0.5px]">
+            <button
+              type="submit"
+              className="flex gap-2 items-center focus:outline-none focus:shadow-outline font-normal text-sm leading-4"
+            >
+              <svg
+                width="32"
+                height="32"
+                viewBox="0 0 32 32"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M24 11.44L20 14.8571V12.5714H16L11 21.7143H8V19.4286H10L15 10.2857H20V8L24 11.44ZM8 10.2857H11L12.15 12.7657L11.03 14.8229L10 12.5714H8V10.2857ZM24 20.5829L20 24V21.7143H15L13.85 19.2343L14.97 17.1771L16 19.4286H20V17.1429L24 20.5829Z"
+                  fill="black"
+                />
+              </svg>
+              Randomize
+            </button>
+          </span>
         </div>
         <div className="grid gap-4 h-full row-span-3 overflow-scroll">
           {Object.keys(currentUser.parameters || {}).map(
