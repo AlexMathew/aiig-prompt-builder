@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useCurrentUser } from "../context/CurrentUserContext";
 import {
-  useParameterSelection,
   useParameterSelectionUpdate,
   usePromptBaseUpdate,
 } from "../context/PromptContext";
@@ -9,13 +8,13 @@ import {
   getRandomBasePrompt,
   getRandomSelectionFromArray,
 } from "../utils/randomize";
+import ParameterSelection from "./ParameterSelection";
 import SaleModal from "./SaleModal";
 
 const Builder: React.FC = () => {
   const [showSaleModal, setShowSaleModal] = useState<boolean>(false);
   const [promptInput, setPromptInput] = useState<string>("");
   const setPromptBase = usePromptBaseUpdate();
-  const promptParameters = useParameterSelection();
   const setPromptParameter = useParameterSelectionUpdate();
   const currentUser = useCurrentUser();
 
@@ -44,7 +43,7 @@ const Builder: React.FC = () => {
   }, [promptInput]);
 
   return (
-    <div className="w-2/3 max-h-screen h-screen grid items-center justify-center">
+    <div className="w-4/5 max-h-screen h-screen grid items-center justify-center">
       <div className="font-bold text-md sm:text-xl -mb-10 mt-12 flex gap-4 items-center justify-center sm:justify-start">
         <img src="./logo.png" alt="" />
         Prompt Hero
@@ -80,35 +79,7 @@ const Builder: React.FC = () => {
           </button>
         </div>
         <div className="grid gap-4 h-full row-span-3 overflow-scroll">
-          {Object.keys(currentUser.parameters || {}).map(
-            (parameter: string, index: number) => (
-              <div key={index}>
-                {parameter}
-                <div className="grid grid-cols-3 gap-x-4 gap-y-1">
-                  {Object.keys((currentUser.parameters || {})[parameter]).map(
-                    (option: string, optionIndex: number) => {
-                      const isSelected = promptParameters[parameter] === option;
-                      return (
-                        <div
-                          key={`${index}_${optionIndex}`}
-                          className={`cursor-pointer ${
-                            isSelected ? "font-bold" : "font-normal"
-                          } ${isSelected ? "text-black" : "text-gray-400"}`}
-                          onClick={(e) => {
-                            setPromptParameter({
-                              [parameter]: isSelected ? "" : option,
-                            });
-                          }}
-                        >
-                          {(currentUser.parameters || {})[parameter][option]}
-                        </div>
-                      );
-                    }
-                  )}
-                </div>
-              </div>
-            )
-          )}
+          <ParameterSelection />
         </div>
         <div className="row-span-1 grid gap-4 mb-12">
           {!currentUser.paying ? (
