@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import { useCurrentUser } from "../context/CurrentUserContext";
-import {
-  useParameterSelection,
-  useParameterSelectionUpdate,
-} from "../context/PromptContext";
+import OptionsSection from "./OptionsSection";
 
 interface ParameterSelectionProps {}
 
@@ -11,39 +8,13 @@ const ParameterSelection: React.FC<ParameterSelectionProps> = () => {
   const [seeMoreOfParameter, setSeeMoreOfParameter] = useState<{
     [parameter: string]: boolean;
   }>({});
-  const promptParameters = useParameterSelection();
-  const setPromptParameter = useParameterSelectionUpdate();
   const currentUser = useCurrentUser();
 
-  const getParameterOptionsDiv = (
-    range: string[],
-    parameter: string,
-    index: number
-  ) => {
-    console.log(range);
-
-    return (
-      <>
-        {range.map((option: string, optionIndex: number) => {
-          const isSelected = promptParameters[parameter] === option;
-          return (
-            <div
-              key={`${index}_${optionIndex}`}
-              className={`cursor-pointer ${
-                isSelected ? "font-bold" : "font-normal"
-              } ${isSelected ? "text-black" : "text-gray-400"}`}
-              onClick={(e) => {
-                setPromptParameter({
-                  [parameter]: isSelected ? "" : option,
-                });
-              }}
-            >
-              {(currentUser.parameters || {})[parameter][option]}
-            </div>
-          );
-        })}
-      </>
-    );
+  const toggleSeeMoreOfParameter = (parameter: string) => {
+    setSeeMoreOfParameter({
+      ...seeMoreOfParameter,
+      [parameter]: !seeMoreOfParameter?.[parameter],
+    });
   };
 
   return (
@@ -57,51 +28,12 @@ const ParameterSelection: React.FC<ParameterSelectionProps> = () => {
               {parameter}
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-2">
-              {getParameterOptionsDiv(
-                Object.keys((currentUser.parameters || {})?.[parameter]).slice(
-                  0,
-                  9
-                ),
-                parameter,
-                index
-              )}
-              {Object.keys((currentUser.parameters || {})?.[parameter]).length >
-              9 ? (
-                seeMoreOfParameter?.[parameter] ? (
-                  getParameterOptionsDiv(
-                    Object.keys(
-                      (currentUser.parameters || {})?.[parameter]
-                    ).slice(9),
-                    parameter,
-                    index
-                  )
-                ) : (
-                  <div
-                    className={`cursor-pointer font-normal text-[#FD6585]`}
-                    onClick={(e) => {
-                      setSeeMoreOfParameter({
-                        ...seeMoreOfParameter,
-                        [parameter]: true,
-                      });
-                    }}
-                  >
-                    See More
-                  </div>
-                )
-              ) : null}
-              {seeMoreOfParameter?.[parameter] ? (
-                <div
-                  className={`cursor-pointer font-normal text-[#FD6585]`}
-                  onClick={(e) => {
-                    setSeeMoreOfParameter({
-                      ...seeMoreOfParameter,
-                      [parameter]: false,
-                    });
-                  }}
-                >
-                  See Less
-                </div>
-              ) : null}
+              <OptionsSection
+                parameter={parameter}
+                index={index}
+                seeMoreOfParameter={seeMoreOfParameter?.[parameter]}
+                toggleSeeMoreOfParameter={toggleSeeMoreOfParameter}
+              />
             </div>
           </div>
         )
