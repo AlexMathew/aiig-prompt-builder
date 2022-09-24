@@ -33,7 +33,12 @@ const ParameterSelection: React.FC<ParameterSelectionProps> = () => {
   return (
     <>
       {parameters.map((parameter: string, index: number) => (
-        <div key={index} className="flex flex-row gap-4">
+        <div
+          key={index}
+          className={`flex flex-row gap-4 ${
+            !selectedParametersOrder.includes(parameter) ? "opacity-40" : ""
+          }`}
+        >
           <div className="w-[4%] min-w-[4%]">X</div>
           <div className="w-[4%] min-w-[4%]">
             <input
