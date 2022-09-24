@@ -80,14 +80,16 @@ const ParameterSelection: React.FC<ParameterSelectionProps> = () => {
                         key={index}
                         ref={provided.innerRef}
                         {...provided.draggableProps}
-                        {...provided.dragHandleProps}
                         className={`flex flex-row gap-4 mb-2 ${
                           !selectedParametersOrder.includes(parameter)
                             ? "opacity-40"
                             : ""
                         }`}
                       >
-                        <div className="w-[4%] min-w-[4%]">
+                        <div
+                          className="w-[4%] min-w-[4%]"
+                          {...provided.dragHandleProps}
+                        >
                           <MdDragIndicator className="text-xl sm:text-2xl" />
                         </div>
                         <div className="w-[4%] min-w-[4%]">
