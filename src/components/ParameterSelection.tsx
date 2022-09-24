@@ -80,7 +80,7 @@ const ParameterSelection: React.FC<ParameterSelectionProps> = () => {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className={`flex flex-row gap-4 ${
+                        className={`flex flex-row gap-4 mb-2 ${
                           !selectedParametersOrder.includes(parameter)
                             ? "opacity-40"
                             : ""
@@ -124,6 +124,7 @@ const ParameterSelection: React.FC<ParameterSelectionProps> = () => {
                     )}
                   </Draggable>
                 ))}
+                {provided.placeholder}
               </div>
             );
           }}
