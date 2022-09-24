@@ -39,7 +39,7 @@ const Builder: React.FC = () => {
       });
     setPromptParameter(randomParameterSelection);
     updateSelectedParametersOrder({
-      updatedOrder: Object.keys(parameters).slice(0, 4),
+      updatedOrder: Object.keys(parameters),
     });
   };
 

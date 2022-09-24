@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   DragDropContext,
   Droppable,
@@ -30,13 +30,6 @@ const ParameterSelection: React.FC<ParameterSelectionProps> = () => {
     });
   };
 
-  const parameters = [
-    ...selectedParametersOrder,
-    ...Object.keys(currentUser.parameters || {}).filter(
-      (param) => !selectedParametersOrder.includes(param)
-    ),
-  ];
-
   const reorder = (list: string[], startIndex: number, endIndex: number) => {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
@@ -59,6 +52,12 @@ const ParameterSelection: React.FC<ParameterSelectionProps> = () => {
     updateSelectedParametersOrder({ updatedOrder: parameters });
   };
 
+  useEffect(() => {
+    const parameters = Object.keys(currentUser?.parameters || {});
+
+    updateSelectedParametersOrder({ updatedOrder: parameters });
+  }, [currentUser.parameters]);
+
   return (
     <>
       <DragDropContext onDragEnd={onDragEnd}>
@@ -66,69 +65,53 @@ const ParameterSelection: React.FC<ParameterSelectionProps> = () => {
           {(provided, snapshot) => {
             return (
               <div ref={provided.innerRef}>
-                {parameters.map((parameter: string, index: number) => (
-                  <Draggable
-                    key={index}
-                    draggableId={`draggable${index}`}
-                    index={index}
-                    isDragDisabled={
-                      !selectedParametersOrder.includes(parameter)
-                    }
-                  >
-                    {(provided, snapshot) => (
-                      <div
-                        key={index}
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        className={`flex flex-row gap-4 mb-2 ${
-                          !selectedParametersOrder.includes(parameter)
-                            ? "opacity-40"
-                            : ""
-                        }`}
-                      >
+                {selectedParametersOrder.map(
+                  (parameter: string, index: number) => (
+                    <Draggable
+                      key={index}
+                      draggableId={`draggable${index}`}
+                      index={index}
+                      isDragDisabled={
+                        !selectedParametersOrder.includes(parameter)
+                      }
+                    >
+                      {(provided, snapshot) => (
                         <div
-                          className="w-[4%] min-w-[4%]"
-                          {...provided.dragHandleProps}
+                          key={index}
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          className={`flex flex-row gap-4 mb-2 ${
+                            !selectedParametersOrder.includes(parameter)
+                              ? "opacity-40"
+                              : ""
+                          }`}
                         >
-                          <MdDragIndicator className="text-xl sm:text-2xl" />
-                        </div>
-                        <div className="w-[4%] min-w-[4%]">
-                          <input
-                            type="checkbox"
-                            name=""
-                            id=""
-                            checked={selectedParametersOrder.includes(
-                              parameter
-                            )}
-                            onChange={(e) => {
-                              if (e.target.checked) {
-                                updateSelectedParametersOrder({
-                                  addParameter: parameter,
-                                });
-                              } else {
-                                updateSelectedParametersOrder({
-                                  removeParameter: parameter,
-                                });
+                          <div
+                            className="w-[5%] min-w-[5%]"
+                            {...provided.dragHandleProps}
+                          >
+                            <MdDragIndicator className="text-xl sm:text-2xl" />
+                          </div>
+                          <div className="w-[30%] min-w-[30%] text-base font-medium">
+                            {parameter}
+                          </div>
+                          <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-2">
+                            <OptionsSection
+                              parameter={parameter}
+                              index={index}
+                              seeMoreOfParameter={
+                                seeMoreOfParameter?.[parameter]
                               }
-                            }}
-                            className="accent-white"
-                          />
+                              toggleSeeMoreOfParameter={
+                                toggleSeeMoreOfParameter
+                              }
+                            />
+                          </div>
                         </div>
-                        <div className="w-[28%] min-w-[28%] text-base font-medium">
-                          {parameter}
-                        </div>
-                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-2">
-                          <OptionsSection
-                            parameter={parameter}
-                            index={index}
-                            seeMoreOfParameter={seeMoreOfParameter?.[parameter]}
-                            toggleSeeMoreOfParameter={toggleSeeMoreOfParameter}
-                          />
-                        </div>
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
+                      )}
+                    </Draggable>
+                  )
+                )}
                 {provided.placeholder}
               </div>
             );
