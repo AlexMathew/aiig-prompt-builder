@@ -3,6 +3,7 @@ import { useCurrentUser } from "../context/CurrentUserContext";
 import {
   useParameterSelectionUpdate,
   usePromptBaseUpdate,
+  useSelectedParametersOrderUpdate,
 } from "../context/PromptContext";
 import {
   getRandomBasePrompt,
@@ -16,6 +17,7 @@ const Builder: React.FC = () => {
   const [promptInput, setPromptInput] = useState<string>("");
   const setPromptBase = usePromptBaseUpdate();
   const setPromptParameter = useParameterSelectionUpdate();
+  const updateSelectedParametersOrder = useSelectedParametersOrderUpdate();
   const currentUser = useCurrentUser();
 
   const closeModal = () => {
@@ -36,6 +38,9 @@ const Builder: React.FC = () => {
         randomParameterSelection[parameter] = randomOption;
       });
     setPromptParameter(randomParameterSelection);
+    updateSelectedParametersOrder({
+      updatedOrder: Object.keys(parameters).slice(0, 4),
+    });
   };
 
   useEffect(() => {
