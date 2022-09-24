@@ -5,6 +5,7 @@ import {
   Draggable,
   DropResult,
 } from "react-beautiful-dnd";
+import { MdDragIndicator } from "react-icons/md";
 import { useCurrentUser } from "../context/CurrentUserContext";
 import {
   useSelectedParametersOrder,
@@ -86,7 +87,9 @@ const ParameterSelection: React.FC<ParameterSelectionProps> = () => {
                             : ""
                         }`}
                       >
-                        <div className="w-[4%] min-w-[4%]">X</div>
+                        <div className="w-[4%] min-w-[4%]">
+                          <MdDragIndicator className="text-xl sm:text-2xl" />
+                        </div>
                         <div className="w-[4%] min-w-[4%]">
                           <input
                             type="checkbox"
