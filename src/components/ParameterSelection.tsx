@@ -53,6 +53,7 @@ const ParameterSelection: React.FC<ParameterSelectionProps> = () => {
                   updateSelectedParametersOrder({ removeParameter: parameter });
                 }
               }}
+              className="accent-white"
             />
           </div>
           <div className="w-[28%] min-w-[28%] text-base font-medium">
