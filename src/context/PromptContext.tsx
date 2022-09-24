@@ -70,3 +70,54 @@ export const useParameterSelection = () => {
 export const useParameterSelectionUpdate = () => {
   return useContext(ParameterSelectionUpdateContext);
 };
+
+interface updateSelectedParametersOrderParams {
+  addParameter?: string;
+  removeParameter?: string;
+  updatedOrder?: string[];
+}
+
+const SelectedParametersOrderContext = React.createContext<string[]>([]);
+const SelectedParametersOrderUpdateContext = React.createContext<
+  (SelectedParametersOrder: updateSelectedParametersOrderParams) => void
+>(() => void 0);
+
+export const SelectedParametersOrderProvider = ({ children }: ProviderArgs) => {
+  const [selectedParametersOrder, setSelectedParametersOrder] = useState<
+    string[]
+  >([]);
+
+  const updateSelectedParametersOrder = ({
+    addParameter,
+    removeParameter,
+    updatedOrder,
+  }: updateSelectedParametersOrderParams) => {
+    if (addParameter) {
+      setSelectedParametersOrder([...selectedParametersOrder, addParameter]);
+    } else if (removeParameter) {
+      setSelectedParametersOrder([
+        ...selectedParametersOrder.filter((p) => p !== removeParameter),
+      ]);
+    } else if (updatedOrder) {
+      setSelectedParametersOrder([...updatedOrder]);
+    }
+  };
+
+  return (
+    <SelectedParametersOrderContext.Provider value={selectedParametersOrder}>
+      <SelectedParametersOrderUpdateContext.Provider
+        value={updateSelectedParametersOrder}
+      >
+        {children}
+      </SelectedParametersOrderUpdateContext.Provider>
+    </SelectedParametersOrderContext.Provider>
+  );
+};
+
+export const useSelectedParametersOrder = () => {
+  return useContext(SelectedParametersOrderContext);
+};
+
+export const useSelectedParametersOrderUpdate = () => {
+  return useContext(SelectedParametersOrderUpdateContext);
+};

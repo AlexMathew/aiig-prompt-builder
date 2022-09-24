@@ -5,6 +5,7 @@ import FinalPrompt from "./components/FinalPrompt";
 import {
   ParameterSelectionProvider,
   PromptBaseProvider,
+  SelectedParametersOrderProvider,
 } from "./context/PromptContext";
 import { supabase } from "./supabaseClient";
 import { CurrentUserProvider } from "./context/CurrentUserContext";
@@ -15,10 +16,12 @@ const App: React.FC = () => {
       <CurrentUserProvider>
         <PromptBaseProvider>
           <ParameterSelectionProvider>
-            <div className="h-screen grid sm:grid-cols-2 justify-items-center">
-              <Builder />
-              <FinalPrompt />
-            </div>
+            <SelectedParametersOrderProvider>
+              <div className="h-screen grid sm:grid-cols-2 justify-items-center">
+                <Builder />
+                <FinalPrompt />
+              </div>
+            </SelectedParametersOrderProvider>
           </ParameterSelectionProvider>
         </PromptBaseProvider>
       </CurrentUserProvider>
