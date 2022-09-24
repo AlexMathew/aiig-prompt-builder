@@ -5,7 +5,11 @@ import {
   useCurrentUser,
   useCurrentUserUpdate,
 } from "../context/CurrentUserContext";
-import { useParameterSelection, usePromptBase } from "../context/PromptContext";
+import {
+  useParameterSelection,
+  usePromptBase,
+  useSelectedParametersOrder,
+} from "../context/PromptContext";
 import { supabase } from "../supabaseClient";
 import AuthModal from "./AuthModal";
 
@@ -15,10 +19,11 @@ const FinalPrompt: React.FC = () => {
   const [supabaseUser, setSupabaseUser] = useState<User | null>(null);
   const prompt = usePromptBase();
   const promptParameters = useParameterSelection();
+  const selectedParametersOrder = useSelectedParametersOrder();
   const currentUser = useCurrentUser();
   const setCurrentUser = useCurrentUserUpdate();
 
-  const parametersText = Object.keys(promptParameters)
+  const parametersText = selectedParametersOrder
     .map(
       (parameter) =>
         currentUser.parameters?.[parameter][promptParameters[parameter]]
