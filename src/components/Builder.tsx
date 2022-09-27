@@ -29,14 +29,12 @@ const Builder: React.FC = () => {
     setPromptInput(randomPrompt);
     const parameters = currentUser?.parameters ?? {};
     const randomParameterSelection: { [parameter: string]: string } = {};
-    Object.keys(parameters)
-      .slice(0, 4)
-      .forEach((parameter) => {
-        const randomOption = getRandomSelectionFromArray(
-          Object.keys(parameters[parameter])
-        );
-        randomParameterSelection[parameter] = randomOption;
-      });
+    Object.keys(parameters).forEach((parameter, index) => {
+      const randomOption = getRandomSelectionFromArray(
+        Object.keys(parameters[parameter])
+      );
+      randomParameterSelection[parameter] = index < 4 ? randomOption : "";
+    });
     setPromptParameter(randomParameterSelection);
     updateSelectedParametersOrder({
       updatedOrder: Object.keys(parameters),
