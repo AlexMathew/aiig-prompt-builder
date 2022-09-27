@@ -17,9 +17,13 @@ const App: React.FC = () => {
         <PromptBaseProvider>
           <ParameterSelectionProvider>
             <SelectedParametersOrderProvider>
-              <div className="h-screen grid sm:grid-cols-2 justify-items-center">
-                <Builder />
-                <FinalPrompt />
+              <div className="h-screen grid sm:grid-cols-8 justify-items-center">
+                <div className="col-span-5 w-full grid justify-items-center">
+                  <Builder />
+                </div>
+                <div className="col-span-3 w-full">
+                  <FinalPrompt />
+                </div>
               </div>
             </SelectedParametersOrderProvider>
           </ParameterSelectionProvider>
