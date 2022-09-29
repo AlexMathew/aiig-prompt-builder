@@ -8,6 +8,7 @@ import {
 import { MdDragIndicator } from "react-icons/md";
 import { useCurrentUser } from "../context/CurrentUserContext";
 import {
+  useParameterSelection,
   useSelectedParametersOrder,
   useSelectedParametersOrderUpdate,
 } from "../context/PromptContext";
@@ -20,6 +21,7 @@ const ParameterSelection: React.FC<ParameterSelectionProps> = () => {
     [parameter: string]: boolean;
   }>({});
   const currentUser = useCurrentUser();
+  const promptParameters = useParameterSelection();
   const selectedParametersOrder = useSelectedParametersOrder();
   const updateSelectedParametersOrder = useSelectedParametersOrderUpdate();
 
@@ -66,51 +68,51 @@ const ParameterSelection: React.FC<ParameterSelectionProps> = () => {
             return (
               <div ref={provided.innerRef}>
                 {selectedParametersOrder.map(
-                  (parameter: string, index: number) => (
-                    <Draggable
-                      key={index}
-                      draggableId={`draggable${index}`}
-                      index={index}
-                      isDragDisabled={
-                        !selectedParametersOrder.includes(parameter)
-                      }
-                    >
-                      {(provided, snapshot) => (
-                        <div
-                          key={index}
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          className={`flex flex-row gap-4 mb-2 ${
-                            !selectedParametersOrder.includes(parameter)
-                              ? "opacity-40"
-                              : ""
-                          }`}
-                        >
+                  (parameter: string, index: number) => {
+                    const isSelected = !!promptParameters?.[parameter];
+                    return (
+                      <Draggable
+                        key={index}
+                        draggableId={`draggable${index}`}
+                        index={index}
+                      >
+                        {(provided, snapshot) => (
                           <div
-                            className="w-[5%] min-w-[5%]"
-                            {...provided.dragHandleProps}
+                            key={index}
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            className="flex flex-row gap-4 mb-2"
                           >
-                            <MdDragIndicator className="text-xl sm:text-2xl" />
+                            <div
+                              className="w-[5%] min-w-[5%]"
+                              {...provided.dragHandleProps}
+                            >
+                              <MdDragIndicator className="text-xl sm:text-2xl" />
+                            </div>
+                            <div
+                              className={`w-[30%] min-w-[30%] text-base font-medium ${
+                                isSelected ? "text-[#FD6585]" : ""
+                              }`}
+                            >
+                              {parameter}
+                            </div>
+                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-2">
+                              <OptionsSection
+                                parameter={parameter}
+                                index={index}
+                                seeMoreOfParameter={
+                                  seeMoreOfParameter?.[parameter]
+                                }
+                                toggleSeeMoreOfParameter={
+                                  toggleSeeMoreOfParameter
+                                }
+                              />
+                            </div>
                           </div>
-                          <div className="w-[30%] min-w-[30%] text-base font-medium">
-                            {parameter}
-                          </div>
-                          <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-2">
-                            <OptionsSection
-                              parameter={parameter}
-                              index={index}
-                              seeMoreOfParameter={
-                                seeMoreOfParameter?.[parameter]
-                              }
-                              toggleSeeMoreOfParameter={
-                                toggleSeeMoreOfParameter
-                              }
-                            />
-                          </div>
-                        </div>
-                      )}
-                    </Draggable>
-                  )
+                        )}
+                      </Draggable>
+                    );
+                  }
                 )}
                 {provided.placeholder}
               </div>
