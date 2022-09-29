@@ -7,7 +7,7 @@ interface SaleModalProps {
 const SaleModal: React.FC<SaleModalProps> = ({ closeModal }) => {
   return (
     <div className="w-screen h-screen absolute top-0 left-0 flex content-center items-center justify-center bg-[#00000080]">
-      <div className="h-full w-full sm:h-1/3 sm:w-1/2 bg-white flex items-center justify-center px-8">
+      <div className="h-full w-full sm:h-2/5 sm:w-1/2 bg-white flex items-center justify-center px-8">
         <div className="grid grid-rows-5 gap-4">
           <div
             className="row-span-1 flex flex-row-reverse text-extrabold text-xl cursor-pointer"
